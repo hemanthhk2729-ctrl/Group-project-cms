@@ -1,0 +1,31 @@
+<?php
+session_start();
+
+$host = 'localhost';
+$db   = 'courier_management';
+$user = 'root';
+$pass = '';
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    die("Database connection failed. Please check XAMPP/MySQL settings.");
+}
+
+function e($value) {
+    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+function require_login() {
+    if (!isset($_SESSION['user'])) {
+        header('Location: login.php');
+        exit;
+    }
+}
